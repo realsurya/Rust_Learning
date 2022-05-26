@@ -26,7 +26,7 @@ fn main() {
 
     println!("\n\nTesting how String variables interact");
     let s3 = String::from("Hello");
-    let s4 = s3; // now s4 refers to teh pointer location of s3.
+    let s4 = s3; // now s4 refers to the pointer location of s3.
                  // this is because creating a deep copy is slow in runtime.
                  //
                  // To avoid double free error (since there is only 1 copy of heap data)
@@ -36,7 +36,7 @@ fn main() {
                  // Rust will never create deep copies of pointer-based types.
                  // Hoewever, strs can be cloned with
     let s5 = s4.clone();
-    println!("s3 has beem moved to s4 ({}). Hoewever, we can still .clone to make deep copy to s5: {}", s4,s5);
+    println!("s3 has beem moved to s4 ({}). However, we can still .clone to make deep copy to s5: {}", s4,s5);
 
 
    println!("\nTesting how integers interact:");
@@ -48,4 +48,28 @@ fn main() {
               // rather than a pointer reference.
     println!("Int x = {}, and y = x. Y is a copy of x ({}) in this case since size is known. Stack only data can be copied!", x, y);
 
+
+
+
+    println!("\n\nTesting ownership w/ functions:");
+
+    let a: i32 = 10;
+    let b = this_makes_copy(a);
+    println!("Since integers a and b are stack data, passing a to a function makes a copy instead of moving it.");
+    println!("As you can see, both a and b are accessible: {}, {}", a, b);
+
+    let s6 = String::from("REEEE");
+    println!("\nString s6 is currently: {}. We will pass this to a function as param.", s6);
+    this_takes_ownership(s6);
+    println!("The string s6 is now been moved to the parameter for the function and was dropped.");
+    println!("Therefore s6 is no longer accessible. We can fix this by having the function return the string back to us. Or through borrowing.");
+
+}
+
+fn this_makes_copy(in_num: i32) -> i32{
+    in_num // blindly return the parameter
+}
+
+fn this_takes_ownership(in_str: String){
+    println!("The string passed to this_takes_ownership is: {}", in_str);
 }
